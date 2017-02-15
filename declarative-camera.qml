@@ -35,6 +35,9 @@ Rectangle {
         stillControls.previewAvailable = true
         cameraUI.state = "PhotoPreview"
       }
+      onImageSaved: {
+            console.log("output: " + camera.imageCapture.capturedImagePath)
+      }
     }
 
     videoRecorder {
@@ -53,7 +56,7 @@ Rectangle {
 
   VideoOutput {
     id: viewfinder
-    visible: cameraUI.state == "PhotoCapture" || cameraUI.state == "VideoCapture"
+    visible: cameraUI.state == "PhotoCapture"
 
     x: 0
     y: 0

@@ -37,7 +37,9 @@ FocusScope {
       CameraButton {
         text: "Capture"
         visible: camera.imageCapture.ready
-        onClicked: camera.imageCapture.capture()
+        onClicked: {
+            camera.imageCapture.capture();
+        }
       }
 
       CameraPropertyButton {
@@ -96,7 +98,7 @@ FocusScope {
       }
 
       CameraButton {
-        text: "Switch to Video"
+        text: "Rec"
         onClicked: captureControls.videoModeSelected()
       }
 
