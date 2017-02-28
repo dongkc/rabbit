@@ -54,7 +54,7 @@ namespace
 
   bool process2(string img_path, string txt_path)
   {
-    cout << "path: " << img_path;
+    cout << "path: " << img_path << endl;
     string cmd("D:/ocr/bin/1.exe");
 
     Process::Args arg;
@@ -117,7 +117,7 @@ bool PhotoRecognize::postMessage(const QString& msg)
   //QString output_txt("/home/dongkc/test.txt");
   string img_path("D:/ocr/1.jpg");
   process2(img_path, output_txt.toStdString());
-  return true;
+  cout << "==================" << endl;
 #if 0
     QProcess ocr(this);
     QString cmd("1.exe");
@@ -141,22 +141,20 @@ bool PhotoRecognize::postMessage(const QString& msg)
   QFile f(output_txt);
   f.open(QIODevice::ReadOnly | QIODevice::Text);
   QTextStream stream(&f);
+  cout << "1==================" << endl;
   //stream.setCodec(QTextCodec::codecForName("UTF-16LE"));
 
   QStringList list;
-  QString utf16 = stream.read(500);
-  QByteArray arr = line.toUtf8();
-  QString line(arr);
+  QString line = stream.read(500);
 
   while(!line.isEmpty()) {
     line = line.remove("\n");
     list << line;
 
-    utf16 = stream.read(500);
-    arr = line.toUtf8();
-    line = arr;
+    line = stream.read(500);
   }
 
+  cout << "2==================" << endl;
   static int click_num = 0;
   for (int i = 0; i < list.size(); i++) {
     //QUrl url("http://tsn.baidu.com/text2audio");
