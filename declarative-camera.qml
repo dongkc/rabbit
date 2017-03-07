@@ -37,6 +37,7 @@ Rectangle {
       }
       onImageSaved: {
             console.log("output: " + camera.imageCapture.capturedImagePath)
+            backend.postMessage("dongkechang");
       }
     }
 

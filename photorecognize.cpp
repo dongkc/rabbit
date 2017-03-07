@@ -7,6 +7,6 @@ void PhotoRecognize::recognize(const QString& path)
 
 bool PhotoRecognize::postMessage(const QString& msg)
 {
-  qDebug() << "message from c++ code";
+  qDebug() << "message from c++ code " << msg;
   return true;
 }
