@@ -1,6 +1,12 @@
+#include <qDebug>
 #include "photorecognize.h"
 
-PhotoRecognize::PhotoRecognize(QObject *parent) : QObject(parent)
+void PhotoRecognize::recognize(const QString& path)
 {
+}
 
+bool PhotoRecognize::postMessage(const QString& msg)
+{
+  qDebug() << "message from c++ code";
+  return true;
 }

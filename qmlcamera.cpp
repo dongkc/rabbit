@@ -41,11 +41,19 @@
 #include <QGuiApplication>
 #include <QQuickView>
 #include <QQmlEngine>
+#include <QQmlContext>
+
+#include "photorecognize.h"
 
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc,argv);
     QQuickView view;
+
+    PhotoRecognize backend;
+    view.engine()->rootContext()->setContextProperty("backend", &backend);
+
+
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     // Qt.quit() called in embedded .qml by default only emits
     // quit() signal, so do this (optionally use Qt.exit()).

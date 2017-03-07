@@ -7,7 +7,7 @@ class PhotoRecognize : public QObject
 {
   Q_OBJECT
 public:
-  explicit PhotoRecognize(QObject *parent = 0);
+  Q_INVOKABLE bool postMessage(const QString& msg);
 
 signals:
   void recognizeDone(const QString& txt_path);
