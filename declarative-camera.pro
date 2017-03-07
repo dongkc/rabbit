@@ -13,3 +13,6 @@ INSTALLS += target
 HEADERS += \
     photorecognize.h
 
+
+INCLUDEPATH += F:/linux/rabbit/include/
+LIBS += -LF:/linux/rabbit/libs/ -lPocoFoundationd
