@@ -4,9 +4,10 @@
 #include <string>
 #include <QObject>
 #include <QNetworkAccessManager>
-#include <QMediaPlayList>
-#include <QRequest>
-#include <QReplay>
+#include <QMediaPlaylist>
+#include <QMediaPlayer>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 class PhotoRecognize : public QObject
 {
@@ -27,7 +28,7 @@ public slots:
  public:
   QNetworkAccessManager *net_mgr;
   QMediaPlayer * player;
-  QMediaPlayList *play_list;
+  QMediaPlaylist *play_list;
 };
 
 #endif // PHOTORECOGNIZE_H

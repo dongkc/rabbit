@@ -5,7 +5,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QMediaPlayer>
-#include <qDebug>
+#include <QtDebug>
 #include "photorecognize.h"
 #include "Poco/Path.h"
 
@@ -16,7 +16,7 @@ PhotoRecognize::PhotoRecognize(QObject* parent)
 {
   player = new QMediaPlayer;
   net_mgr = new QNetworkAccessManager(this);
-  play_list = new QMediaPlayList;
+  play_list = new QMediaPlaylist;
 
   connect(net_mgr, SIGNAL(finished(QNetworkReply*)),
           this, SLOT(replyFinished(QNetworkReply*)));
@@ -24,6 +24,8 @@ PhotoRecognize::PhotoRecognize(QObject* parent)
 
 void PhotoRecognize::replyFinished(QNetworkReply* reply)
 {
+  static bool is_playing = false;
+
   switch(reply->error()) {
   case QNetworkReply::NoError:
     {
@@ -34,10 +36,16 @@ void PhotoRecognize::replyFinished(QNetworkReply* reply)
       f.write(arr.data(), arr.size());
 
       play_list->addMedia(QUrl::fromLocalFile(mp3));
+
+      if (!is_playing) {
+        play_list->setCurrentIndex(1);
+        player->play();
+        is_playing = true;
+      }
     }
-  }
   default:
     qDebug() << "http error: " << reply->errorString();
+  }
 }
 
 void PhotoRecognize::recognize(const QString& path)
@@ -75,10 +83,10 @@ bool PhotoRecognize::postMessage(const QString& msg)
     url.setQuery(url_query.toString());
     qDebug() << "url: " << url.toString();
 
-    net_mgr->get(url);
+    net_mgr->get(QNetworkRequest(url));
   }
 
-  player->playlist(play_list);
+  player->setPlaylist(play_list);
   player->setVolume(50);
   player->play();
 
