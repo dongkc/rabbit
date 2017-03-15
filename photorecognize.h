@@ -1,12 +1,19 @@
 #ifndef PHOTORECOGNIZE_H
 #define PHOTORECOGNIZE_H
 
+#include <string>
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QMediaPlayList>
+#include <QRequest>
+#include <QReplay>
 
 class PhotoRecognize : public QObject
 {
   Q_OBJECT
 public:
+  PhotoRecognize(QObject* parent = NULL);
+
   Q_INVOKABLE bool postMessage(const QString& msg);
 
 signals:
@@ -14,6 +21,13 @@ signals:
 
 public slots:
   void recognize(const QString& path);
+
+  void replyFinished(QNetworkReply* reply);
+
+ public:
+  QNetworkAccessManager *net_mgr;
+  QMediaPlayer * player;
+  QMediaPlayList *play_list;
 };
 
 #endif // PHOTORECOGNIZE_H
