@@ -12,6 +12,14 @@
 using namespace std;
 using namespace Poco;
 
+namespace
+{
+  bool process(QString& path, QString& output)
+  {
+    return true;
+  }
+}
+
 PhotoRecognize::PhotoRecognize(QObject* parent)
 {
   player = new QMediaPlayer;
@@ -88,7 +96,6 @@ bool PhotoRecognize::postMessage(const QString& msg)
 
   player->setPlaylist(play_list);
   player->setVolume(50);
-  player->play();
 
   return true;
-  }
+}
