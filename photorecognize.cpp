@@ -6,11 +6,10 @@
 #include <QUrlQuery>
 #include <QMediaPlayer>
 #include <QtDebug>
+#include <QProcess>
 #include "photorecognize.h"
-//#include "Poco/Path.h"
 
 using namespace std;
-//using namespace Poco;
 
 namespace
 {
@@ -47,8 +46,9 @@ void PhotoRecognize::replyFinished(QNetworkReply* reply)
 
       if (!is_playing) {
         play_list->setCurrentIndex(1);
-        //player->play();
         is_playing = true;
+
+        player->play();
       }
     }
   default:
@@ -62,7 +62,23 @@ void PhotoRecognize::recognize(const QString& path)
 
 bool PhotoRecognize::postMessage(const QString& msg)
 {
-  QFile f("D:\\test.txt");
+    QString output_txt("C:/test.txt");
+    QProcess ocr(this);
+    QString cmd("demo.exe");
+    ocr.setProgram(cmd);
+    QStringList args;
+    args << img_path << output_txt;
+    ocr.setArguments(args);
+    ocr.setWorkingDirectory("D:/ocr/");
+
+    ocr.start();
+
+    if (!ocr.waitFinished()) {
+        qDebug() << "photo recognize error";
+        return false;
+    }
+
+    QFile f(output_txt);
   f.open(QIODevice::ReadOnly | QIODevice::Text);
   QTextStream stream(&f);
   stream.setCodec(QTextCodec::codecForName("GB2312"));
