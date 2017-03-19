@@ -4,8 +4,8 @@ import QtMultimedia 5.4
 Rectangle {
   id : cameraUI
 
-  width: 800
-  height: 480
+  width: 1024
+  height: 768
 
   color: "black"
   state: "PhotoCapture"

@@ -1,4 +1,4 @@
-﻿#include <QStringList>
+#include <QStringList>
 #include <QFile>
 #include <QTextStream>
 #include <QTextCodec>
@@ -7,10 +7,10 @@
 #include <QMediaPlayer>
 #include <QtDebug>
 #include "photorecognize.h"
-#include "Poco/Path.h"
+//#include "Poco/Path.h"
 
 using namespace std;
-using namespace Poco;
+//using namespace Poco;
 
 namespace
 {
@@ -47,7 +47,7 @@ void PhotoRecognize::replyFinished(QNetworkReply* reply)
 
       if (!is_playing) {
         play_list->setCurrentIndex(1);
-        player->play();
+        //player->play();
         is_playing = true;
       }
     }
