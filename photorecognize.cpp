@@ -15,6 +15,27 @@ namespace
 {
   bool process(QString& path, QString& output)
   {
+    QProcess ocr;
+    QString cmd("D:/ocr/curl.exe");
+    ocr.setProgram(cmd);
+    QStringList args;
+    args << path << "-o" << output << "-v";
+    ocr.setArguments(args);
+    ocr.setWorkingDirectory("D:/ocr/");
+
+    ocr.start();
+
+    if (!ocr.waitForFinished()) {
+        qDebug() << "photo recognize error";
+        return false;
+    }
+
+    if (ocr.exitStatus()!= 0) {
+        qDebug() << "curl crashed, return code invalid";
+    } else {
+        qDebug() << "curl return code: " << ocr.exitCode();
+    }
+
     return true;
   }
 }
@@ -63,6 +84,7 @@ void PhotoRecognize::recognize(const QString& path)
 bool PhotoRecognize::postMessage(const QString& msg)
 {
     QString output_txt("C:/test.txt");
+#if 0
     QProcess ocr(this);
     QString cmd("demo.exe");
     ocr.setProgram(cmd);
@@ -77,6 +99,7 @@ bool PhotoRecognize::postMessage(const QString& msg)
         qDebug() << "photo recognize error";
         return false;
     }
+#endif
 
     QFile f(output_txt);
   f.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -84,18 +107,16 @@ bool PhotoRecognize::postMessage(const QString& msg)
   stream.setCodec(QTextCodec::codecForName("GB2312"));
 
   QStringList list;
-  QString line = stream.read(1000);
+  QString line = stream.read(100);
 
   while(!line.isEmpty()) {
     list << line;
 
-    line = stream.read(1000);
+    line = stream.read(100);
   }
 
-  QString t = stream.readAll();
-  qDebug() << "file context: " << t;
-
-  for (int i = 0; i < list.size(); i++) {
+  //for (int i = 0; i < list.size(); i++) {
+  for (int i = 0; i < 1; i++) {
     QUrl url("http://tsn.baidu.com/text2audio");
     QUrlQuery url_query;
     url_query.addQueryItem("cuid", "2e8a03f1fea94e6883c804a010c3f315");
@@ -106,12 +127,23 @@ bool PhotoRecognize::postMessage(const QString& msg)
 
     url.setQuery(url_query.toString());
     qDebug() << "url: " << url.toString();
+    QString mp3("d:/1.mp3");
+    process(url.toString(), mp3);
+    qDebug() << "-------------------";
 
-    net_mgr->get(QNetworkRequest(url));
+    play_list->addMedia(QUrl::fromLocalFile(mp3));
+    static bool is_playing = false;
+    if (!is_playing) {
+      play_list->setCurrentIndex(1);
+      player->setPlaylist(play_list);
+      player->setVolume(50);
+
+      is_playing = true;
+      player->play();
+    }
+
   }
 
-  player->setPlaylist(play_list);
-  player->setVolume(50);
 
   return true;
 }

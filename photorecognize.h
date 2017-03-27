@@ -12,7 +12,7 @@
 class PhotoRecognize : public QObject
 {
   Q_OBJECT
-PUBLIC:
+public:
   PhotoRecognize(QObject* parent = NULL);
 
   Q_INVOKABLE bool postMessage(const QString& msg);
