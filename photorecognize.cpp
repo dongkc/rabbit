@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
@@ -7,34 +8,32 @@
 #include <QMediaPlayer>
 #include <QtDebug>
 #include <QProcess>
+#include <Poco/Process.h>
+
 #include "photorecognize.h"
 
 using namespace std;
+using namespace Poco;
 
 namespace
 {
-  bool process(QString& path, QString& output)
+  bool process(QString body, QString output)
   {
-    QProcess ocr;
-    QString cmd("D:/ocr/curl.exe");
-    ocr.setProgram(cmd);
-    QStringList args;
-    args << path << "-o" << output << "-v";
-    ocr.setArguments(args);
-    ocr.setWorkingDirectory("D:/ocr/");
+    qDebug() << "path: " << body;
+    string url("http://tsn.baidu.com/text2audio");
+    string cmd("/usr/bin/curl");
 
-    ocr.start();
+    Process::Args arg;
+    arg.push_back("-v");
+    arg.push_back("--data");
+    arg.push_back(body.toStdString());
+    arg.push_back("-o");
+    arg.push_back(output.toStdString());
+    arg.push_back(url);
 
-    if (!ocr.waitForFinished()) {
-        qDebug() << "photo recognize error";
-        return false;
-    }
-
-    if (ocr.exitStatus()!= 0) {
-        qDebug() << "curl crashed, return code invalid";
-    } else {
-        qDebug() << "curl return code: " << ocr.exitCode();
-    }
+    ProcessHandle handle = Process::launch(cmd, arg, "/tmp");
+    int rc = Process::wait(handle);
+    cout << "rc = " << rc << endl;
 
     return true;
   }
@@ -83,7 +82,8 @@ void PhotoRecognize::recognize(const QString& path)
 
 bool PhotoRecognize::postMessage(const QString& msg)
 {
-    QString output_txt("C:/test.txt");
+  //QString output_txt("C:/test.txt");
+  QString output_txt("/home/dongkc/test.txt");
 #if 0
     QProcess ocr(this);
     QString cmd("demo.exe");
@@ -101,22 +101,22 @@ bool PhotoRecognize::postMessage(const QString& msg)
     }
 #endif
 
-    QFile f(output_txt);
+  QFile f(output_txt);
   f.open(QIODevice::ReadOnly | QIODevice::Text);
   QTextStream stream(&f);
   stream.setCodec(QTextCodec::codecForName("GB2312"));
 
   QStringList list;
-  QString line = stream.read(100);
+  QString line = stream.read(500);
 
   while(!line.isEmpty()) {
+    line = line.remove("\n");
     list << line;
 
-    line = stream.read(100);
+    line = stream.read(500);
   }
 
-  //for (int i = 0; i < list.size(); i++) {
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < list.size(); i++) {
     QUrl url("http://tsn.baidu.com/text2audio");
     QUrlQuery url_query;
     url_query.addQueryItem("cuid", "2e8a03f1fea94e6883c804a010c3f315");
@@ -127,7 +127,7 @@ bool PhotoRecognize::postMessage(const QString& msg)
 
     url.setQuery(url_query.toString());
     qDebug() << "url: " << url.toString();
-    QString mp3("d:/1.mp3");
+    QString mp3 = QString::asprintf("/tmp/%d.mp3", i);
     process(url.toString(), mp3);
     qDebug() << "-------------------";
 
@@ -141,9 +141,7 @@ bool PhotoRecognize::postMessage(const QString& msg)
       is_playing = true;
       player->play();
     }
-
   }
-
 
   return true;
 }

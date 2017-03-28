@@ -47,7 +47,7 @@ bool postMessage(const QString& msg)
 {
   QMediaPlayer* player = new QMediaPlayer;
   QMediaPlaylist* play_list = new QMediaPlaylist;
-    QString output_txt("/home/dongkc/test.txt");
+  QString output_txt("/home/dongkc/test.txt");
 #if 0
     QProcess ocr(this);
     QString cmd("demo.exe");
@@ -65,23 +65,22 @@ bool postMessage(const QString& msg)
     }
 #endif
 
-    QFile f(output_txt);
+  QFile f(output_txt);
   f.open(QIODevice::ReadOnly | QIODevice::Text);
   QTextStream stream(&f);
   stream.setCodec(QTextCodec::codecForName("GB2312"));
 
   QStringList list;
-  QString line = stream.read(1000);
+  QString line = stream.read(500);
 
   while(!line.isEmpty()) {
     line = line.remove("\n");
     list << line;
 
-    line = stream.read(1000);
+    line = stream.read(500);
   }
 
-  //for (int i = 0; i < list.size(); i++) {
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < list.size(); i++) {
     QUrl url("http://tsn.baidu.com/text2audio");
     QUrlQuery url_query;
     url_query.addQueryItem("cuid", "2e8a03f1fea94e6883c804a010c3f315");
@@ -92,7 +91,7 @@ bool postMessage(const QString& msg)
 
     url.setQuery(url_query.toString());
     qDebug() << "url: " << url.toString();
-    QString mp3("/tmp/1.mp3");
+    QString mp3 = QString::asprintf("/tmp/%d.mp3", i);
     process(url_query.toString(), mp3);
     qDebug() << "-------------------";
 

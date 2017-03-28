@@ -16,3 +16,4 @@ HEADERS += \
 
 #INCLUDEPATH += F:/linux/rabbit/include/
 #//LIBS += -LF:/linux/rabbit/libs/ -lPocoFoundationd
+LIBS += -lPocoFoundation
