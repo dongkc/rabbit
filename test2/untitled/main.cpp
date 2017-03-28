@@ -19,9 +19,9 @@ using namespace Poco;
 
 namespace
 {
-  bool process(QString path, QString output)
+  bool process(QString body, QString output)
   {
-    qDebug() << "path: " << path;
+    qDebug() << "path: " << body;
     string text("tex=北京楼市实施“认房又认贷”，二套房首付比例提至60%；&cuid=2e8a03f1fea94e6883c804a010c3f315&ctp=1&tok=24.2f81cbdefa3e459d04c4f86ed3991d53.2592000.1491530300.282335-8649205&lan=zh&per=0");
     string url("http://tsn.baidu.com/text2audio");
     string cmd("/usr/bin/curl");
@@ -29,10 +29,9 @@ namespace
     Process::Args arg;
     arg.push_back("-v");
     arg.push_back("--data");
-    arg.push_back(text);
-    arg.push_back("-v");
+    arg.push_back(body.toStdString());
     arg.push_back("-o");
-    arg.push_back("/tmp/1.mp3");
+    arg.push_back(output.toStdString());
     arg.push_back(url);
 
     ProcessHandle handle = Process::launch(cmd, arg, "/tmp");
@@ -72,12 +71,12 @@ bool postMessage(const QString& msg)
   stream.setCodec(QTextCodec::codecForName("GB2312"));
 
   QStringList list;
-  QString line = stream.read(100);
+  QString line = stream.read(1000);
 
   while(!line.isEmpty()) {
     list << line;
 
-    line = stream.read(100);
+    line = stream.read(1000);
   }
 
   //for (int i = 0; i < list.size(); i++) {
@@ -93,7 +92,7 @@ bool postMessage(const QString& msg)
     url.setQuery(url_query.toString());
     qDebug() << "url: " << url.toString();
     QString mp3("/tmp/1.mp3");
-    process(url.toString(), mp3);
+    process(url_query.toString(), mp3);
     qDebug() << "-------------------";
 
     play_list->addMedia(QUrl::fromLocalFile(mp3));
