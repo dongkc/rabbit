@@ -74,6 +74,7 @@ bool postMessage(const QString& msg)
   QString line = stream.read(1000);
 
   while(!line.isEmpty()) {
+    line = line.remove("\n");
     list << line;
 
     line = stream.read(1000);
