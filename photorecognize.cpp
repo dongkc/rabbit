@@ -144,13 +144,17 @@ bool PhotoRecognize::postMessage(const QString& msg)
   //stream.setCodec(QTextCodec::codecForName("UTF-16LE"));
 
   QStringList list;
-  QString line = stream.read(500);
+  QString utf16 = stream.read(500);
+  QByteArray arr = line.toUtf8();
+  QString line(arr);
 
   while(!line.isEmpty()) {
     line = line.remove("\n");
     list << line;
 
-    line = stream.read(500);
+    utf16 = stream.read(500);
+    arr = line.toUtf8();
+    line = arr;
   }
 
   static int click_num = 0;
