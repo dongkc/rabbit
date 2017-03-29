@@ -14,6 +14,6 @@ HEADERS += \
     photorecognize.h
 
 
-#INCLUDEPATH += F:/linux/rabbit/include/
-#//LIBS += -LF:/linux/rabbit/libs/ -lPocoFoundationd
-LIBS += -lPocoFoundation
+INCLUDEPATH += G:/workspace/rabbit/include/
+LIBS += -LG:/workspace/rabbit/libs/ -lPocoFoundationd
+#LIBS += -lPocoFoundation
